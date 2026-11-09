@@ -43,3 +43,20 @@ def analisar_feedback_cliente(texto : str) -> AnaliseSaida:
   analise = AnaliseSaida(**dados)
   salvar_feedback_no_banco(texto, analise.sentimento_cliente , analise.risco_desistencia)
   return analise
+
+def buscar_todos_feedbacks():
+  conexao = sqlite3.connect("banco.db")
+  cursor = conexao.cursor()
+  cursor.execute("SELECT * FROM feedbacks ")
+  registros = cursor.fetchall()
+  conexao.close()
+
+  feedbacks = []
+  for linha in registros:
+    feedbacks.append({
+      "id": linha[0],
+      "texto_cliente": linha[1],
+      "sentimento": linha[2],
+      "risco_desistencia": linha[3]
+    })
+  return feedbacks
